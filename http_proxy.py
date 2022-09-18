@@ -73,23 +73,6 @@ def create_log2(hostname, incoming_header, response_sent):
     with open(pathname + "/" + hostname + str(uuid.uuid1()) + ".json", "w+") as outfile:
         json.dump(json_dict, outfile, indent=4)
 
-
-def tunneling(from_socket, to_socket):
-    ''' Whatever received from from_socket forward to to_socket'''
-    ''' to be used for CONNECT command '''
-    while 1:
-        try:
-            to_socket.sendall(from_socket.recv(BUFFER_SIZE))
-        except socket.error as e:
-            if isinstance(e.args, tuple):
-                if list(e.args)[0]==errno.EPIPE:
-                    pass # disconnected
-
-            # since disconnected close the tunnel
-            to_socket.close()
-            from_socket.close()
-            return
-
 # TODO: IMPLEMENT THIS METHOD 
 def proxy(client_socket,client_IP):
     '''
