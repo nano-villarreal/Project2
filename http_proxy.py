@@ -40,6 +40,40 @@ def parse_server_info(client_data):
     return (server_ip, server_port, hostname, False) # NOT a CONNECT request
 
 
+# Creates a subdirectory for the hostname and a new json file
+def create_log(hostname, incoming_header, modified_header, server_response):
+    pathname = "Log/" + hostname
+    if not os.path.exists(pathname):
+        os.makedirs(pathname, 0o777, exist_ok=True)
+        os.chmod('Log', 0o777)
+        os.chmod(pathname, 0o777)
+    
+    json_dict = {
+        'Incoming header': incoming_header,
+        'Modified header': modified_header,
+        'Server reponse received' : server_response
+    }
+    #Dir/Subdir/hostnameuuid.json
+    with open(pathname + "/" + hostname + str(uuid.uuid1()) + ".json", "w+") as outfile:
+        json.dump(json_dict, outfile, indent=4)
+
+# Creates a subdirectory for the hostname and a new json file (Use this for CONNECT requests)
+def create_log2(hostname, incoming_header, response_sent):
+    pathname = "Log/" + hostname
+    if not os.path.exists(pathname):
+        os.makedirs(pathname, 0o777, exist_ok=True)
+        os.chmod('Log', 0o777)
+        os.chmod(pathname, 0o777)
+
+    json_dict = {
+        'Incoming header': incoming_header,
+        'Proxy response sent': response_sent,
+    }
+    #Dir/Subdir/hostnameuuid.json
+    with open(pathname + "/" + hostname + str(uuid.uuid1()) + ".json", "w+") as outfile:
+        json.dump(json_dict, outfile, indent=4)
+
+
 def tunneling(from_socket, to_socket):
     ''' Whatever received from from_socket forward to to_socket'''
     ''' to be used for CONNECT command '''
