@@ -51,22 +51,10 @@ def tunneling(from_socket, to_socket):
                 if list(e.args)[0]==errno.EPIPE:
                     pass # disconnected
 
-            '''
-            Since disconnected, close the tunnel.
-            '''
+            # since disconnected close the tunnel
             to_socket.close()
             from_socket.close()
             return
-
-
-def monitor_stdin(proxy_socket):
-    ''' Listens for input from stdin, if (ctrl+D) then exit the program'''
-    while True:
-        line = sys.stdin.readline()
-        if not line:
-            proxy_socket.close()
-            os._exit(1)
-
 
 # TODO: IMPLEMENT THIS METHOD 
 def proxy(client_socket,client_IP):
@@ -78,12 +66,13 @@ def proxy(client_socket,client_IP):
 
 
 def main():
+    # check arguments
     if(len(sys.argv)!=3 and len(sys.argv)!=4):
         print("Incorrect number of arguments. \nUsage python3 http_proxy.py PORT")
         print("Incorrect number of arguments. \nUsage python3 http_proxy.py PORT Log")
         sys.exit()
 
-    # enable Logging
+    # enable logging
     if(len(sys.argv)==4 and sys.argv[3]=="Log"):
         global LOG_FLAG
         LOG_FLAG = True
@@ -97,10 +86,6 @@ def main():
     print ("HTTP proxy listening on port ",sys.argv[2])
     proxy_socket.bind(("127.0.0.1", int(sys.argv[2])))
     proxy_socket.listen(50) #allow connections  
-
-    # create/launch a thread to monitor keyboard input for Ctrl+D
-    stdin_thread = threading.Thread(target=monitor_stdin, args=[proxy_socket], daemon=True)  # listens for eof
-    stdin_thread.start()
 
     try: 
         while True:
