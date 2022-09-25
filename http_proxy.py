@@ -78,7 +78,7 @@ def create_log2(hostname, incoming_header, response_sent):
 def tunnel(from_socket, to_socket):
     while True:
         try:
-            to_socket.sendall(from_socket.recv(2048))
+            to_socket.sendall(from_socket.recv(BUFFER_SIZE))
         except:
             # close sockets when done or when error
             from_socket.close()
