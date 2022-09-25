@@ -97,13 +97,13 @@ def proxy(client_socket,client_IP):
 
 def main():
     # check arguments
-    if(len(sys.argv)!=3 and len(sys.argv)!=4):
+    if(len(sys.argv)!=2 and len(sys.argv)!=3):
         print("Incorrect number of arguments. \nUsage python3 http_proxy.py PORT")
         print("Incorrect number of arguments. \nUsage python3 http_proxy.py PORT Log")
         sys.exit()
 
     # enable logging
-    if(len(sys.argv)==4 and sys.argv[3]=="Log"):
+    if(len(sys.argv)==3 and sys.argv[2]=="Log"):
         global LOG_FLAG
         LOG_FLAG = True
         DIR_NAME = "./Log"
@@ -116,8 +116,8 @@ def main():
     proxy_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     
     # bind with the port number given and allow connections
-    print ("HTTP proxy listening on port ",sys.argv[2])
-    proxy_socket.bind(('', int(sys.argv[2])))
+    print ("HTTP proxy listening on port ",sys.argv[1]])
+    proxy_socket.bind(('', int(sys.argv[1])))
     proxy_socket.listen(50) #allow connections  
 
     try: 
