@@ -101,7 +101,7 @@ def main():
     # create the socket for this proxy
     proxy_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print ("HTTP proxy listening on port ",sys.argv[2])
-    proxy_socket.bind(("127.0.0.1", int(sys.argv[2])))
+    proxy_socket.bind(('', int(sys.argv[2])))
     proxy_socket.listen(50) #allow connections  
 
     try: 
