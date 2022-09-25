@@ -112,7 +112,7 @@ def main():
             client_socket, client_IP = proxy_socket.accept()
             t = threading.Thread(target=proxy, args=(client_socket,client_IP,))
             t.start()
-    except KeyboardInterrupt: # handle Ctrl + C
+    except KeyboardInterrupt: # handle Ctrl+C
         proxy_socket.close()
         os._exit(1)
 
