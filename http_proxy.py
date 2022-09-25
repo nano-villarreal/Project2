@@ -100,7 +100,9 @@ def main():
 
     # create the socket for this proxy
     proxy_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    proxy.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    proxy_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    
+    # bind with the port number given and allow connections
     print ("HTTP proxy listening on port ",sys.argv[2])
     proxy_socket.bind(('', int(sys.argv[2])))
     proxy_socket.listen(50) #allow connections  
@@ -110,7 +112,7 @@ def main():
             client_socket, client_IP = proxy_socket.accept()
             t = threading.Thread(target=proxy, args=(client_socket,client_IP,))
             t.start()
-    except KeyboardInterrupt:
+    except KeyboardInterrupt: # handle Ctrl + C
         proxy_socket.close()
         os._exit(1)
 
