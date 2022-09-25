@@ -74,6 +74,7 @@ def create_log2(hostname, incoming_header, response_sent):
         json.dump(json_dict, outfile, indent=4)
 
 # Tunneling method: whatever message received from "from_socket" send to "to_socket" 
+# should be used for CONNECT request
 def tunnel(from_socket, to_socket):
     while True:
         try:
