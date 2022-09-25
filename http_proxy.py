@@ -116,7 +116,7 @@ def main():
     proxy_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     
     # bind with the port number given and allow connections
-    print ("HTTP proxy listening on port ",sys.argv[1]])
+    print ("HTTP proxy listening on port ",sys.argv[1])
     proxy_socket.bind(('', int(sys.argv[1])))
     proxy_socket.listen(50) #allow connections  
 
