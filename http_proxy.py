@@ -126,7 +126,7 @@ def main():
             t = threading.Thread(target=proxy, args=(client_socket,client_IP,))
             t.start()
     except KeyboardInterrupt: # handle Ctrl+C
-        print ("Keyboard Interrupt with Ctrl+C")
+        print ("Keyboard Interrupt: Closing down proxy")
         proxy_socket.close()
         os._exit(1)
 
