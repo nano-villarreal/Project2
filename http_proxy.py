@@ -29,10 +29,10 @@ def parse_server_info(client_data):
     if "https://" in URL or ":443" in URL:
         server_port = 443
 
-        if "CONNECT" in status_line: # This is a CONNECT request
+        if "CONNECT" in status_line: # CONNECT request found
             hostname = URL.split(":")[0]
             server_ip = socket.gethostbyname(hostname)
-            return (server_ip, 443, hostname, True)
+            return (server_ip, 443, hostname, True) # For a CONNECT request
 
     hostname = URL.split(":")[1][2:].split("/")[0]
     server_ip = socket.gethostbyname(hostname)
@@ -72,6 +72,18 @@ def create_log2(hostname, incoming_header, response_sent):
     #Dir/Subdir/hostnameuuid.json
     with open(pathname + "/" + hostname + str(uuid.uuid1()) + ".json", "w+") as outfile:
         json.dump(json_dict, outfile, indent=4)
+
+# Tunneling method: whatever message received from "from_socket" send to "to_socket" 
+def tunnel(from_socket, to_socket):
+    while True:
+        try:
+            to_socket.sendall(from_socket.recv(2048))
+        except:
+            # close sockets when done or when error
+            from_socket.close()
+            to_socket.close()
+            return
+        
 
 # TODO: IMPLEMENT THIS METHOD 
 def proxy(client_socket,client_IP):
