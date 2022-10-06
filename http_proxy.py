@@ -102,7 +102,19 @@ def proxy(client_socket,client_IP):
  
 # For HTTP CONNECT request
 def foo(server_info):
-   pass
+    
+   proxy_socket.sendall(client_data.encode("utf-8"))
+   data = proxy_socket.recv(BUFFER_SIZE)
+   if data:
+    create_log2(server_info[2], client_data ,"200 OK")
+    tunnel()
+   else:
+    
+    create_log2(server_info[2], client_data ,"502 Bad Gateway")
+     client_socket.close()
+     proxy_socket.close()
+     return
+   tunnel()
  
 # For nonCONNECT requests
 def bar(client_socket, client_IP, server_info, client_data):
@@ -111,17 +123,19 @@ def bar(client_socket, client_IP, server_info, client_data):
    #TCP connection request to server
    server_addr = (server_info[0], server_info[1])
    proxy_socket.connect(server_addr)
+
    while True:
        # send modified data (HTTP request) to server
        modified_data = modify_headers(client_data.decode("utf-8","backslashreplace"))
        proxy_socket.sendall(modified_data.encode("utf-8"))
        # send all each time you receive until there's nothing more to receive
        data = proxy_socket.recv(BUFFER_SIZE)
+       print(data.decode("utf-8","backslashreplace"))
        if not data: break
        client_socket.sendall(data)
        response = data
 
-   #log once after all data sent
+   log once after all data sent
    create_log(server_info[2], client_data.decode("utf-8","backslashreplace"), modified_data, response.decode("utf-8","backslashreplace"))
  
 def main():
